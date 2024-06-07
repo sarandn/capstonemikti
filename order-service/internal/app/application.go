@@ -3,12 +3,12 @@ package app
 import (
 	"log"
 	"net/http"
+	"order-service/config"
+	"order-service/internal/domain/service"
+	"order-service/internal/interfaces/api"
+	"order-service/pkg/utils"
 
 	"github.com/gorilla/mux"
-	"github.com/yourusername/go-crud/config"
-	"github.com/yourusername/go-crud/internal/domain/service"
-	"github.com/yourusername/go-crud/internal/interfaces/api"
-	"github.com/yourusername/go-crud/internal/pkg/utils"
 )
 
 type Application struct {

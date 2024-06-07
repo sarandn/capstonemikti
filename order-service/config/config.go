@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/redis/go-redis/v8"
+	"github.com/go-redis/redis/v8"
 	"github.com/yourusername/order-service/internal/infra/db"
 	"github.com/yourusername/order-service/internal/infra/redis"
 	"github.com/yourusername/order-service/internal/pkg/utils"
