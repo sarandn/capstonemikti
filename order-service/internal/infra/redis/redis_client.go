@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/net/context"
+	"github.com/yourusername/order-service/internal/pkg/utils"
 )
 
 var rdb *redis.Client
@@ -31,10 +32,10 @@ func InitRedisClient() *redis.Client {
 
 	_, err := rdb.Ping(ctx).Result()
 	if err != nil {
-		log.Fatalf("Failed to connect to Redis: %v", err)
+		utils.ErrorLogger.Fatalf("Failed to connect to Redis: %v", err)
 	}
 
-	log.Println("Connected to Redis")
+	utils.InfoLogger.Println("Connected to Redis")
 	return rdb
 }
 

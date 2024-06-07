@@ -1,36 +1,19 @@
 package db
 
 import (
-    "database/sql"
-    "log"
-    "os"
+	"log"
+	"os"
 
-    _ "github.com/joho/godotenv/autoload"
-    "github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+	"github.com/yourusername/order-service/internal/pkg/utils"
 )
 
-var db *sqlx.DB
-
 func InitDB() *sqlx.DB {
-    if db != nil {
-        return db
-    }
-
-    dbUser := os.Getenv("DB_USER")
-    dbPassword := os.Getenv("DB_PASSWORD")
-    dbName := os.Getenv("DB_NAME")
-    dbSSLMode := os.Getenv("DB_SSLMODE")
-
-    dsn := "user=" + dbUser + " password=" + dbPassword + " dbname=" + dbName + " sslmode=" + dbSSLMode
-    conn, err := sqlx.Connect("postgres", dsn)
-    if err != nil {
-        log.Fatalln(err)
-    }
-
-    db = conn
-    return db
-}
-
-func GetDB() *sqlx.DB {
-    return db
+	db, err := sqlx.Connect("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		utils.ErrorLogger.Fatalf("Failed to connect to database: %v", err)
+	}
+	utils.InfoLogger.Println("Database connected successfully")
+	return db
 }
