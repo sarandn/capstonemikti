@@ -74,3 +74,57 @@ func (service *UserServiceImpl) GetUsers() ([]entity.UserEntity, error) {
 
 	return entity.ToUserListEntity(getUserList), nil
 }
+
+func (service *UserServiceImpl) UpdateUser(request request.UserUpdateServiceRequest, pathId int) (map[string]interface{}, error) {
+	getUserById, err := service.repo.GetUser(pathId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// validasi jika datanya kosong atau tidak
+	if request.FullName == "" {
+		request.FullName = getUserById.FullName
+	}
+
+	if request.Email == "" {
+		request.Email = getUserById.Email
+	}
+
+	if request.PhoneNum == "" {
+		request.PhoneNum = getUserById.PhoneNum
+	}
+
+	if request.Address == "" {
+		request.Address = getUserById.Address
+	}
+
+	userReq := model.User{
+		UserID:   pathId,
+		FullName: request.FullName,
+		Email:    request.Email,
+		Password: getUserById.Password,
+		PhoneNum: request.PhoneNum,
+		Address:  request.Address,
+		RoleIDFK: getUserById.RoleIDFK,
+	}
+
+	// melakukan update dari userReq
+	updateUser, errUpdateUser := service.repo.UpdateUsers(userReq)
+
+	if errUpdateUser != nil {
+		return nil, errUpdateUser
+	}
+
+	return ResponseToJson{"full_name": updateUser.FullName, "email": updateUser.Email}, nil
+}
+
+func (service *UserServiceImpl) DeleteData(userId int) (entity.UserEntity, error) {
+	delUser, errDelUser := service.repo.DeleteUser(userId)
+
+	if errDelUser != nil {
+		return entity.UserEntity{}, errDelUser
+	}
+
+	return entity.ToUserEntity(delUser), nil
+}

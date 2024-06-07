@@ -48,3 +48,25 @@ func (repo *UserRepositoryImpl) GetUsers() ([]model.User, error) {
 
 	return users, nil
 }
+
+func (repo *UserRepositoryImpl) UpdateUsers(user model.User) (model.User, error) {
+	err := repo.db.Model(model.User{}).Where("user_id = ?", user.UserID).Updates(user).Error
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
+func (repo *UserRepositoryImpl) DeleteUser(Id int) (model.User, error) {
+	var userData model.User
+
+	err := repo.db.Where("user_id = ?", Id).Delete(&userData).Error
+
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return userData, nil
+}

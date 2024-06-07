@@ -62,3 +62,32 @@ func (controller *UserHandlerImpl) GetUsers(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response.ResponseToClient(http.StatusOK, "success", getUsers))
 }
+
+func (controller *UserHandlerImpl) UpdateUser(c echo.Context) error {
+	user := new(request.UserUpdateServiceRequest)
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	if err := c.Bind(user); err != nil {
+		return c.JSON(http.StatusBadRequest, response.ResponseToClient(http.StatusBadRequest, err.Error(), nil))
+	}
+
+	userUpdate, errUserUpdate := controller.service.UpdateUser(*user, id)
+
+	if errUserUpdate != nil {
+		return c.JSON(http.StatusBadRequest, response.ResponseToClient(http.StatusBadRequest, errUserUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, response.ResponseToClient(http.StatusOK, "data berhasil diupdate", userUpdate))
+}
+
+func (controller *UserHandlerImpl) DeleteUser(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	delUser, errDelUser := controller.service.DeleteData(id)
+
+	if errDelUser != nil {
+		return c.JSON(http.StatusNotFound, response.ResponseToClient(http.StatusNotFound, errDelUser.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, response.ResponseToClient(http.StatusOK, "Berhasil delete user", delUser))
+}

@@ -29,6 +29,8 @@ func InitializedServer() *echo.Echo {
 	r.POST("/registrasi", userHandler.SaveUser)
 	r.GET("/user/:id", userHandler.GetUser)
 	r.GET("/users", userHandler.GetUsers)
+	r.PUT("/user/update/:id", userHandler.UpdateUser)
+	r.DELETE("/user/delete/:id", userHandler.DeleteUser)
 
 	r.POST("/registrasi/role", roleHandler.SaveRole)
 	r.GET("/role/:id", roleHandler.GetRole)
