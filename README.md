@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+# capstone mikti
+=======
 # Capstone-Aplikasi 'Ticketing' menggunakan Golang
 Proyek ini dibuat untuk untuk memenuhi syarat-syarat menyelesaikan kegiatan Study Independent MSIB batch 6 di mitra MIKTI. Selain itu, proyek ini juga bertujuan untuk memperdalam pemahaman menggunakan Golang.
 
@@ -24,3 +27,4 @@ Untuk detail lebih lanjut, dapat dilihat di [sini](https://docs.google.com/prese
 
 ## Dokumentasi
 - Postman
+>>>>>>> 13e49fe88f63860a7a670221137b2c57477325d7
