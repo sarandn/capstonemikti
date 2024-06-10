@@ -70,3 +70,13 @@ func (repo *UserRepositoryImpl) DeleteUser(Id int) (model.User, error) {
 
 	return userData, nil
 }
+
+func (repo *UserRepositoryImpl) FindUserByEmail(email string) (*model.User, error) {
+	user := new(model.User)
+
+	if err := repo.db.Where("email = ?", email).Take(&user).Error; err != nil {
+		return user, err
+	}
+
+	return user, nil
+}

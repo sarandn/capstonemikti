@@ -27,9 +27,9 @@ func (controller *UserHandlerImpl) SaveUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.ResponseToClient(http.StatusBadRequest, err.Error(), nil))
 	}
 
-	// if err := c.Validate(user); err != nil {
-	// 	return err
-	// }
+	if err := c.Validate(user); err != nil {
+		return err
+	}
 
 	// masukan data setelah di validasi
 	saveUser, errSaveUser := controller.service.SaveUser(*user)
@@ -90,4 +90,20 @@ func (controller *UserHandlerImpl) DeleteUser(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, response.ResponseToClient(http.StatusOK, "Berhasil delete user", delUser))
+}
+
+func (controller *UserHandlerImpl) LoginUser(c echo.Context) error {
+	user := new(request.UserLoginRequest)
+
+	if err := c.Bind(user); err != nil {
+		return c.JSON(http.StatusBadRequest, response.ResponseToClient(http.StatusBadRequest, err.Error(), nil))
+	}
+
+	userLogin, errUserLogin := controller.service.LoginUser(user.Email, user.Password)
+
+	if errUserLogin != nil {
+		return c.JSON(http.StatusBadRequest, response.ResponseToClient(http.StatusBadRequest, errUserLogin.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, response.ResponseToClient(http.StatusOK, "Login berhasil", userLogin))
 }

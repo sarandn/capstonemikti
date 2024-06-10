@@ -15,3 +15,8 @@ type UserUpdateServiceRequest struct {
 	PhoneNum string `validate:"gte=10,lte=15,numeric" json:"phone_num"`
 	Address  string ` json:"address"`
 }
+
+type UserLoginRequest struct {
+	Email    string `validate:"required,email" json:"email"`
+	Password string `validate:"required" json:"password"`
+}

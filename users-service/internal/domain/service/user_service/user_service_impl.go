@@ -1,23 +1,30 @@
 package userservice
 
 import (
+	"errors"
+	"strconv"
+	"time"
 	"users-service/internal/domain/model"
 	"users-service/internal/domain/model/entity"
 	userrepository "users-service/internal/infra/user_repository"
 	"users-service/internal/interfaces/api/request"
+	"users-service/pkg/utils/helper"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type ResponseToJson map[string]interface{}
 
 type UserServiceImpl struct {
-	repo userrepository.UserRepository
+	repo          userrepository.UserRepository
+	tokenUserCase helper.TokenUserCase
 }
 
-func NewUserService(repo userrepository.UserRepository) *UserServiceImpl {
+func NewUserService(repo userrepository.UserRepository, token helper.TokenUserCase) *UserServiceImpl {
 	return &UserServiceImpl{
-		repo: repo,
+		repo:          repo,
+		tokenUserCase: token,
 	}
 }
 
@@ -127,4 +134,39 @@ func (service *UserServiceImpl) DeleteData(userId int) (entity.UserEntity, error
 	}
 
 	return entity.ToUserEntity(delUser), nil
+}
+
+func (service *UserServiceImpl) LoginUser(email string, password string) (map[string]interface{}, error) {
+	user, err := service.repo.FindUserByEmail(email)
+
+	if err != nil {
+		return nil, errors.New("Email tidak ditemukan")
+	}
+
+	errPass := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+	if errPass != nil {
+		return nil, errors.New("Password salah !")
+	}
+
+	// buat identitas menggunakan jwt
+	expiredTime := time.Now().Local().Add(1 * time.Hour)
+
+	claims := helper.JwtCustomClaims{
+		UserID:   strconv.Itoa(user.UserID),
+		FullName: user.FullName,
+		Email:    user.Email,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "rest-gorm",
+			ExpiresAt: jwt.NewNumericDate(expiredTime),
+		},
+	}
+
+	token, errToken := service.tokenUserCase.GenerateAccessToken(claims)
+
+	if errToken != nil {
+		return nil, errToken
+	}
+
+	return ResponseToJson{"token": token}, nil
 }

@@ -11,4 +11,5 @@ type UserService interface {
 	GetUsers() ([]entity.UserEntity, error)
 	UpdateUser(request request.UserUpdateServiceRequest, pathId int) (map[string]interface{}, error)
 	DeleteData(userId int) (entity.UserEntity, error)
+	LoginUser(email string, password string) (map[string]interface{}, error)
 }
