@@ -1,23 +1,22 @@
 package db
 
 import (
-	"log"
-	"order-service/pkg/utils"
-	"os"
+    "log"
+    "os"
 
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+    "gorm.io/driver/postgres"
+    "gorm.io/gorm"
 )
 
-func InitDB() *sqlx.DB {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
-	}
-	db, err := sqlx.Connect("postgres", dsn)
-	if err != nil {
-		utils.ErrorLogger.Fatalf("Failed to connect to database: %v", err)
-	}
-	utils.InfoLogger.Println("Database connected successfully")
-	return db
+func InitDB() *gorm.DB {
+    dsn := os.Getenv("DATABASE_URL")
+    if dsn == "" {
+        log.Fatal("DATABASE_URL environment variable is not set")
+    }
+    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+    if err != nil {
+        log.Fatalf("Failed to connect to database: %v", err)
+    }
+    log.Println("Database connected successfully")
+    return db
 }
