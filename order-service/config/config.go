@@ -1,24 +1,29 @@
 package config
 
 import (
-	"log"
-	"os"
+	"order-service/internal/infra/repository/db"
+	"order-service/pkg/utils"
 
-	"github.com/yourusername/go-crud/internal/infra/db"
-	"github.com/yourusername/go-crud/internal/infra/redis"
+	"github.com/jmoiron/sqlx"
+	"github.com/redis/go-redis/v9"
 )
 
 type Config struct {
-	DB   *sqlx.DB
+	DB    *sqlx.DB
 	Redis *redis.Client
 }
 
 func LoadConfig() *Config {
+	utils.InfoLogger.Println("Initializing database connection...")
 	db := db.InitDB()
+	utils.InfoLogger.Println("Database connection initialized")
+
+	utils.InfoLogger.Println("Initializing Redis client...")
 	redis := redis.InitRedisClient()
+	utils.InfoLogger.Println("Redis client initialized")
 
 	return &Config{
-		DB:   db,
+		DB:    db,
 		Redis: redis,
 	}
 }

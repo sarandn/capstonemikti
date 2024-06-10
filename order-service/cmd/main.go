@@ -1,6 +1,9 @@
 package main
 
-import "github.com/yourusername/go-crud/internal/app"
+import (
+	"order-service/internal/app"
+
+)
 
 func main() {
     application := app.NewApplication()

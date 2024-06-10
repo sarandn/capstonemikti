@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"log"
+	"order-service/pkg/utils"
 	"os"
 	"time"
 
@@ -31,10 +31,10 @@ func InitRedisClient() *redis.Client {
 
 	_, err := rdb.Ping(ctx).Result()
 	if err != nil {
-		log.Fatalf("Failed to connect to Redis: %v", err)
+		utils.ErrorLogger.Fatalf("Failed to connect to Redis: %v", err)
 	}
 
-	log.Println("Connected to Redis")
+	utils.InfoLogger.Println("Connected to Redis")
 	return rdb
 }
 
