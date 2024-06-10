@@ -1,12 +1,12 @@
 package api
 
 import (
-    "net/http"
-    "payment-service/internal/domain/model"
-    "payment-service/internal/infra/repository"
-    "strconv"
+	"net/http"
+	"payment-service/internal/domain/model"
+	"payment-service/internal/infra/repository"
+	"strconv"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 type PaymentHandler struct {
@@ -42,24 +42,30 @@ func (h *PaymentHandler) GetPayment(c *gin.Context) {
 
 func (h *PaymentHandler) UpdatePayment(c *gin.Context) {
     id, _ := strconv.Atoi(c.Param("id"))
-    var payment model.Payment
-    if err := h.Repo.GetByID(uint(id)); err != nil {
+    var payment *model.Payment
+
+    // Tangkap kedua nilai yang dikembalikan oleh GetByID
+    payment, err := h.Repo.GetByID(uint(id))
+    if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
         return
     }
 
-    if err := c.ShouldBindJSON(&payment); err != nil {
+    // Mengikat JSON ke objek payment
+    if err := c.ShouldBindJSON(payment); err != nil { // Menggunakan pointer di sini
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
     payment.ID = uint(id)
-    if err := h.Repo.Update(&payment); err != nil {
+    if err := h.Repo.Update(payment); err != nil { // Menggunakan pointer di sini
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
     c.JSON(http.StatusOK, payment)
 }
+
+
 
 func (h *PaymentHandler) DeletePayment(c *gin.Context) {
     id, _ := strconv.Atoi(c.Param("id"))
