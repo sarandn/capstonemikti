@@ -1,11 +1,11 @@
 package config
 
 import (
+	"order-service/internal/infra/repository/db"
+	"order-service/pkg/utils"
+
 	"github.com/jmoiron/sqlx"
-	"github.com/go-redis/redis/v8"
-	"github.com/yourusername/order-service/internal/infra/db"
-	"github.com/yourusername/order-service/internal/infra/redis"
-	"github.com/yourusername/order-service/internal/pkg/utils"
+	"github.com/redis/go-redis/v9"
 )
 
 type Config struct {

@@ -1,13 +1,12 @@
 package redis
 
 import (
-	"log"
+	"order-service/pkg/utils"
 	"os"
 	"time"
 
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/net/context"
-	"github.com/yourusername/order-service/internal/pkg/utils"
 )
 
 var rdb *redis.Client
