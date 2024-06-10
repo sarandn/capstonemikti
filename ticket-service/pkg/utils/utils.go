@@ -1,13 +1,18 @@
 package utils
 
 import (
-    "github.com/labstack/echo/v4"
+	"time"
+	"os"
+	"github.com/dgrijalva/jwt-go"
 )
 
-func RespondWithError(c echo.Context, code int, message string) error {
-    return c.JSON(code, map[string]string{"error": message})
-}
+func GenerateJWT(userID uint) (string, error) {
+	secret := []byte(os.Getenv("JWT_SECRET"))
+	claims := jwt.MapClaims{}
+	claims["authorized"] = true
+	claims["user_id"] = userID
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-func RespondWithJSON(c echo.Context, code int, payload interface{}) error {
-    return c.JSON(code, payload)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(secret)
 }

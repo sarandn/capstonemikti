@@ -1,7 +1,10 @@
 package model
 
+import "gorm.io/gorm"
+
 type Ticket struct {
-    ID     int    `json:"id"`
-    Title  string `json:"title"`
-    Status string `json:"status"`
+	gorm.Model
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
 }

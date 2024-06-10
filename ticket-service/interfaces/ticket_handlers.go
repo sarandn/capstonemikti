@@ -1,91 +1,86 @@
 package interfaces
 
 import (
-    "database/sql"
-    "net/http"
-    "strconv"
-    "ticket-service/domain/model"
-    "ticket-service/domain/service"
-    "ticket-service/infra/repository"
+	"ticket-service/domain/model"
+	"ticket-service/domain/service"
+	"ticket-service/utils"
+	"net/http"
+	"strconv"
 
-    "github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4"
 )
 
 type TicketHandler struct {
-    service service.TicketService
-}
-
-func NewTicketHandler(service service.TicketService) *TicketHandler {
-    return &TicketHandler{service: service}
-}
-
-func RegisterHandlers(e *echo.Echo, db *sql.DB) {
-    repo := repository.NewTicketRepository(db)
-    svc := service.NewTicketService(repo)
-    handler := NewTicketHandler(svc)
-
-    e.POST("/tickets", handler.CreateTicket)
-    e.GET("/tickets/:id", handler.GetTicketByID)
-    e.GET("/tickets", handler.GetAllTickets)
-    e.PUT("/tickets/:id", handler.UpdateTicket)
-    e.DELETE("/tickets/:id", handler.DeleteTicket)
+	Service *service.TicketService
 }
 
 func (h *TicketHandler) CreateTicket(c echo.Context) error {
-    var ticket model.Ticket
-    if err := c.Bind(&ticket); err != nil {
-        return c.JSON(http.StatusBadRequest, err.Error())
-    }
-    if err := h.service.CreateTicket(&ticket); err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
-    return c.JSON(http.StatusCreated, ticket)
+	ticket := new(model.Ticket)
+	if err := c.Bind(ticket); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	createdTicket, err := h.Service.CreateTicket(ticket)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, createdTicket)
+}
+
+func (h *TicketHandler) GetTickets(c echo.Context) error {
+	tickets, err := h.Service.GetTickets()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, tickets)
 }
 
 func (h *TicketHandler) GetTicketByID(c echo.Context) error {
-    id, err := strconv.Atoi(c.Param("id"))
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, err.Error())
-    }
-    ticket, err := h.service.GetTicketByID(id)
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
-    return c.JSON(http.StatusOK, ticket)
-}
-
-func (h *TicketHandler) GetAllTickets(c echo.Context) error {
-    tickets, err := h.service.GetAllTickets()
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
-    return c.JSON(http.StatusOK, tickets)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	ticket, err := h.Service.GetTicketByID(uint(id))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, ticket)
 }
 
 func (h *TicketHandler) UpdateTicket(c echo.Context) error {
-    id, err := strconv.Atoi(c.Param("id"))
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, err.Error())
-    }
-
-    var ticket model.Ticket
-    if err := c.Bind(&ticket); err != nil {
-        return c.JSON(http.StatusBadRequest, err.Error())
-    }
-    ticket.ID = id
-    if err := h.service.UpdateTicket(&ticket); err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
-    return c.JSON(http.StatusOK, ticket)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	ticket := new(model.Ticket)
+	if err := c.Bind(ticket); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	ticket.ID = uint(id)
+	updatedTicket, err := h.Service.UpdateTicket(ticket)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, updatedTicket)
 }
 
 func (h *TicketHandler) DeleteTicket(c echo.Context) error {
-    id, err := strconv.Atoi(c.Param("id"))
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, err.Error())
-    }
-    if err := h.service.DeleteTicket(id); err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
-    return c.NoContent(http.StatusNoContent)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	if err := h.Service.DeleteTicket(uint(id)); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]string{"message": "Ticket deleted"})
+}
+
+func (h *TicketHandler) GenerateToken(c echo.Context) error {
+	userID := 1 // Ini adalah contoh. Anda harus mengambil userID dari database.
+	token, err := utils.GenerateJWT(uint(userID))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": token,
+	})
 }

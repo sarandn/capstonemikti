@@ -1,65 +1,47 @@
 package repository
 
 import (
-    "database/sql"
-    "ticket-service/domain/model"
+	"ticket-service/domain/model"
+	"gorm.io/gorm"
 )
 
-type TicketRepository interface {
-    Create(ticket *model.Ticket) error
-    FindByID(id int) (*model.Ticket, error)
-    FindAll() ([]*model.Ticket, error)
-    Update(ticket *model.Ticket) error
-    Delete(id int) error
+type TicketRepository struct {
+	DB *gorm.DB
 }
 
-type ticketRepository struct {
-    db *sql.DB
+func (r *TicketRepository) Create(ticket *model.Ticket) (*model.Ticket, error) {
+	if err := r.DB.Create(ticket).Error; err != nil {
+		return nil, err
+	}
+	return ticket, nil
 }
 
-func NewTicketRepository(db *sql.DB) TicketRepository {
-    return &ticketRepository{db: db}
+func (r *TicketRepository) GetAll() ([]model.Ticket, error) {
+	var tickets []model.Ticket
+	if err := r.DB.Find(&tickets).Error; err != nil {
+		return nil, err
+	}
+	return tickets, nil
 }
 
-func (r *ticketRepository) Create(ticket *model.Ticket) error {
-    _, err := r.db.Exec("INSERT INTO tickets (title, status) VALUES ($1, $2)", ticket.Title, ticket.Status)
-    return err
+func (r *TicketRepository) GetByID(id uint) (*model.Ticket, error) {
+	var ticket model.Ticket
+	if err := r.DB.First(&ticket, id).Error; err != nil {
+		return nil, err
+	}
+	return &ticket, nil
 }
 
-func (r *ticketRepository) FindByID(id int) (*model.Ticket, error) {
-    row := r.db.QueryRow("SELECT id, title, status FROM tickets WHERE id = $1", id)
-
-    ticket := &model.Ticket{}
-    if err := row.Scan(&ticket.ID, &ticket.Title, &ticket.Status); err != nil {
-        return nil, err
-    }
-    return ticket, nil
+func (r *TicketRepository) Update(ticket *model.Ticket) (*model.Ticket, error) {
+	if err := r.DB.Save(ticket).Error; err != nil {
+		return nil, err
+	}
+	return ticket, nil
 }
 
-func (r *ticketRepository) FindAll() ([]*model.Ticket, error) {
-    rows, err := r.db.Query("SELECT id, title, status FROM tickets")
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
-
-    var tickets []*model.Ticket
-    for rows.Next() {
-        ticket := &model.Ticket{}
-        if err := rows.Scan(&ticket.ID, &ticket.Title, &ticket.Status); err != nil {
-            return nil, err
-        }
-        tickets = append(tickets, ticket)
-    }
-    return tickets, nil
-}
-
-func (r *ticketRepository) Update(ticket *model.Ticket) error {
-    _, err := r.db.Exec("UPDATE tickets SET title = $1, status = $2 WHERE id = $3", ticket.Title, ticket.Status, ticket.ID)
-    return err
-}
-
-func (r *ticketRepository) Delete(id int) error {
-    _, err := r.db.Exec("DELETE FROM tickets WHERE id = $1", id)
-    return err
+func (r *TicketRepository) Delete(id uint) error {
+	if err := r.DB.Delete(&model.Ticket{}, id).Error; err != nil {
+		return err
+	}
+	return nil
 }

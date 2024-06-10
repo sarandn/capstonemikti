@@ -1,42 +1,30 @@
 package service
 
 import (
-    "ticket-service/domain/model"
-    "ticket-service/infra/repository"
+	"ticket-service/domain/model"
+	"ticket-service/infra/repository"
 )
 
-type TicketService interface {
-    CreateTicket(ticket *model.Ticket) error
-    GetTicketByID(id int) (*model.Ticket, error)
-    GetAllTickets() ([]*model.Ticket, error)
-    UpdateTicket(ticket *model.Ticket) error
-    DeleteTicket(id int) error
+type TicketService struct {
+	Repo repository.TicketRepository
 }
 
-type ticketService struct {
-    repo repository.TicketRepository
+func (s *TicketService) CreateTicket(ticket *model.Ticket) (*model.Ticket, error) {
+	return s.Repo.Create(ticket)
 }
 
-func NewTicketService(repo repository.TicketRepository) TicketService {
-    return &ticketService{repo: repo}
+func (s *TicketService) GetTickets() ([]model.Ticket, error) {
+	return s.Repo.GetAll()
 }
 
-func (s *ticketService) CreateTicket(ticket *model.Ticket) error {
-    return s.repo.Create(ticket)
+func (s *TicketService) GetTicketByID(id uint) (*model.Ticket, error) {
+	return s.Repo.GetByID(id)
 }
 
-func (s *ticketService) GetTicketByID(id int) (*model.Ticket, error) {
-    return s.repo.FindByID(id)
+func (s *TicketService) UpdateTicket(ticket *model.Ticket) (*model.Ticket, error) {
+	return s.Repo.Update(ticket)
 }
 
-func (s *ticketService) GetAllTickets() ([]*model.Ticket, error) {
-    return s.repo.FindAll()
-}
-
-func (s *ticketService) UpdateTicket(ticket *model.Ticket) error {
-    return s.repo.Update(ticket)
-}
-
-func (s *ticketService) DeleteTicket(id int) error {
-    return s.repo.Delete(id)
+func (s *TicketService) DeleteTicket(id uint) error {
+	return s.Repo.Delete(id)
 }
