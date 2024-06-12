@@ -1,7 +1,6 @@
 package app
 
 import (
-	"net/http"
 	"os"
 	"ticket-service/config"
 	"ticket-service/domain/service"
@@ -12,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func StartApp() {
+func StartApp() *echo.Echo {
 	db.Init()
 	e := echo.New()
 	dbInstance := config.GetDB()
@@ -27,13 +26,11 @@ func StartApp() {
 	e.DELETE("/tickets/:id", ticketHandler.DeleteTicket)
 	e.POST("/token", ticketHandler.GenerateToken)
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-
 	port := os.Getenv("SERVER_PORT")
 	if port == "" {
-		port = "8080"
+		port = "8000"
 	}
 	e.Logger.Fatal(e.Start(":" + port))
+
+	return e
 }
