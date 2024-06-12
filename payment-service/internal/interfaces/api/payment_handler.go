@@ -1,77 +1,57 @@
 package api
 
 import (
-	"net/http"
-	"payment-service/internal/domain/model"
-	"payment-service/internal/infra/repository"
-	"strconv"
+    "encoding/json"
+    "net/http"
+    "strconv"
 
-	"github.com/gin-gonic/gin"
+    "github.com/gorilla/mux"
+    "payment-service/internal/domain/model"
+    "payment-service/internal/infra/repository"
 )
 
 type PaymentHandler struct {
-    Repo repository.PaymentRepository
+    Repo *repository.PaymentRepository
 }
 
-func NewPaymentHandler(repo repository.PaymentRepository) *PaymentHandler {
+func NewPaymentHandler(repo *repository.PaymentRepository) *PaymentHandler {
     return &PaymentHandler{Repo: repo}
 }
 
-func (h *PaymentHandler) CreatePayment(c *gin.Context) {
+func (h *PaymentHandler) CreatePayment(w http.ResponseWriter, r *http.Request) {
     var payment model.Payment
-    if err := c.ShouldBindJSON(&payment); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+    if err := json.NewDecoder(r.Body).Decode(&payment); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
+
     if err := h.Repo.Create(&payment); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-    c.JSON(http.StatusOK, payment)
+
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(payment)
 }
 
-func (h *PaymentHandler) GetPayment(c *gin.Context) {
-    id, _ := strconv.Atoi(c.Param("id"))
-    payment, err := h.Repo.GetByID(uint(id))
+func (h *PaymentHandler) GetPayment(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    id, err := strconv.Atoi(vars["id"])
     if err != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+        http.Error(w, "Invalid payment ID", http.StatusBadRequest)
         return
     }
-    c.JSON(http.StatusOK, payment)
-}
 
-func (h *PaymentHandler) UpdatePayment(c *gin.Context) {
-    id, _ := strconv.Atoi(c.Param("id"))
-    var payment *model.Payment
-
-    // Tangkap kedua nilai yang dikembalikan oleh GetByID
-    payment, err := h.Repo.GetByID(uint(id))
+    payment, err := h.Repo.GetByID(id)
     if err != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+        http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 
-    // Mengikat JSON ke objek payment
-    if err := c.ShouldBindJSON(payment); err != nil { // Menggunakan pointer di sini
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+    if payment == nil {
+        http.Error(w, "Payment not found", http.StatusNotFound)
         return
     }
 
-    payment.ID = uint(id)
-    if err := h.Repo.Update(payment); err != nil { // Menggunakan pointer di sini
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-    c.JSON(http.StatusOK, payment)
-}
-
-
-
-func (h *PaymentHandler) DeletePayment(c *gin.Context) {
-    id, _ := strconv.Atoi(c.Param("id"))
-    if err := h.Repo.Delete(uint(id)); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-    c.JSON(http.StatusOK, gin.H{"message": "Payment deleted"})
+    json.NewEncoder(w).Encode(payment)
 }
