@@ -5,10 +5,10 @@ import (
 )
 
 type Order struct {
-	OrderID     int       `gorm:"primaryKey"`
-	UserID      int       `gorm:"not null"`
-	OrderDate   time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	TotalAmount int
-	CreatedAt   time.Time `gorm:"autoCreateTime"`
-	UpdatedAt   time.Time `gorm:"autoUpdateTime"`
+	OrderID     int       `gorm:"column:order_id;primaryKey;autoIncrement"`
+	UserIDFK    int       `gorm:"column:user_id_fk"`
+	OrderDate   time.Time `gorm:"column:order_date"`
+	TotalAmount int       `gorm:"column:total_amount"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
