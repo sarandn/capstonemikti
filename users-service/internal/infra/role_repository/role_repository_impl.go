@@ -50,3 +50,25 @@ func (repo *RoleRepositoryImpl) GetAllRole() ([]model.Role, error) {
 	fmt.Println(roles[1].User == nil)
 	return roles, nil
 }
+
+func (repo *RoleRepositoryImpl) UpdateRole(role model.Role) (model.Role, error) {
+	err := repo.db.Model(model.Role{}).Where("role_id = ?", role.RoleID).Updates(role).Error
+
+	if err != nil {
+		return role, err
+	}
+
+	return role, nil
+}
+
+func (repo *RoleRepositoryImpl) DeleteRole(Id int) (model.Role, error) {
+	var roleData model.Role
+
+	err := repo.db.Where("role_id = ?", Id).Delete(&roleData).Error
+
+	if err != nil {
+		return model.Role{}, err
+	}
+
+	return roleData, nil
+}

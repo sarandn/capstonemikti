@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"order-service/config"
 	"order-service/internal/domain/service"
+	"order-service/internal/infra/repository"
 	"order-service/internal/interfaces/api"
 	"order-service/pkg/utils"
 
@@ -14,19 +15,22 @@ import (
 type Application struct {
 	Config       *config.Config
 	Router       *mux.Router
+	OrderRepo    *repository.OrderRepository
 	OrderService *service.OrderService
 	OrderHandler *api.OrderHandler
 }
 
 func NewApplication() *Application {
 	cfg := config.LoadConfig()
-	orderService := service.NewOrderService(cfg.DB)
+	orderRepo := repository.NewOrderRepository(cfg.DB)
+	orderService := service.NewOrderService(orderRepo)
 	orderHandler := api.NewOrderHandler(orderService)
 
 	r := mux.NewRouter()
 	app := &Application{
 		Config:       cfg,
 		Router:       r,
+		OrderRepo:    orderRepo,
 		OrderService: orderService,
 		OrderHandler: orderHandler,
 	}

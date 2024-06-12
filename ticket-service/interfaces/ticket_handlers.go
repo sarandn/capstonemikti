@@ -1,11 +1,11 @@
 package interfaces
 
 import (
-	"ticket-service/domain/model"
-	"ticket-service/domain/service"
-	"ticket-service/utils"
 	"net/http"
 	"strconv"
+	"ticket-service/domain/model"
+	"ticket-service/domain/service"
+	"ticket-service/pkg/utils"
 
 	"github.com/labstack/echo/v4"
 )

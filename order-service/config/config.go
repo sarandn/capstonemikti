@@ -1,8 +1,9 @@
 package config
 
 import (
-    "order-service/internal/infra/db"
-    "gorm.io/gorm"
+	"order-service/internal/infra/repository/db"
+
+	"gorm.io/gorm"
 )
 
 type Config struct {
