@@ -53,3 +53,41 @@ func (service *RoleServiceImpl) GetRoles() ([]entity.RoleEntity, error) {
 
 	return entity.ToRoleListEntity(getRole), nil
 }
+
+func (service *RoleServiceImpl) UpdateRole(request request.RoleUpdateServiceRequest, pathId int) (map[string]interface{}, error) {
+	getRoleById, err := service.repository.GetRole(pathId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// validasi jika datanya kosong atau tidak
+	if request.RoleName == "" {
+		request.RoleName = getRoleById.RoleName
+	}
+
+	roleReq := model.Role{
+		RoleID:   pathId,
+		RoleName: request.RoleName,
+	}
+
+	updateRole, errUpdateRole := service.repository.UpdateRole(roleReq)
+
+	if errUpdateRole != nil {
+		return nil, errUpdateRole
+	}
+
+	return ResponseToJson{"role_name": updateRole.RoleName}, nil
+}
+
+func (service *RoleServiceImpl) DeleteData(roleId int) (entity.RoleEntity, error){
+	delRole, errDelRole := service.repository.DeleteRole(roleId)
+
+	if errDelRole != nil{
+		return entity.RoleEntity{}, errDelRole
+	}
+
+	return entity.ToRoleEntity(delRole), nil
+}
+
+
