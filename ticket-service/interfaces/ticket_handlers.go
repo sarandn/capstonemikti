@@ -27,13 +27,13 @@ func (h *TicketHandler) CreateTicket(c echo.Context) error {
 	return c.JSON(http.StatusOK, createdTicket)
 }
 
-// GetTickets menangani pengambilan semua tiket
-func (h *TicketHandler) GetTickets(c echo.Context) error {
-	tickets, err := h.Service.GetTickets()
+// GetTicket menangani pengambilan semua tiket
+func (h *TicketHandler) GetTicket(c echo.Context) error {
+	ticket, err := h.Service.GetTicket()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	return c.JSON(http.StatusOK, tickets)
+	return c.JSON(http.StatusOK, ticket)
 }
 
 // GetTicketByID menangani pengambilan tiket berdasarkan ID

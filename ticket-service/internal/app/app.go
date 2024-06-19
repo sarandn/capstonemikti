@@ -19,11 +19,11 @@ func StartApp() *echo.Echo {
 	ticketService := service.TicketService{Repo: ticketRepo}
 	ticketHandler := interfaces.TicketHandler{Service: &ticketService}
 
-	e.POST("/tickets", ticketHandler.CreateTicket)
-	e.GET("/tickets", ticketHandler.GetTickets)
-	e.GET("/tickets/:id", ticketHandler.GetTicketByID)
-	e.PUT("/tickets/:id", ticketHandler.UpdateTicket)
-	e.DELETE("/tickets/:id", ticketHandler.DeleteTicket)
+	e.POST("/ticket", ticketHandler.CreateTicket)
+	e.GET("/ticket", ticketHandler.GetTicket)
+	e.GET("/ticket/:id", ticketHandler.GetTicketByID)
+	e.PUT("/ticket/:id", ticketHandler.UpdateTicket)
+	e.DELETE("/ticket/:id", ticketHandler.DeleteTicket)
 	e.POST("/token", ticketHandler.GenerateToken)
 
 	port := os.Getenv("SERVER_PORT")
@@ -31,6 +31,5 @@ func StartApp() *echo.Echo {
 		port = "8000"
 	}
 	e.Logger.Fatal(e.Start(":" + port))
-
 	return e
 }

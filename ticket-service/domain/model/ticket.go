@@ -6,10 +6,8 @@ import (
 
 type Ticket struct {
 	gorm.Model
-	TicketType    string `json:"ticket_type"`
-	TicketPrice   int    `json:"ticket_price"`
-	QuantityAvail int    `json:"quantity_avail"`
-	Title         string `json:"title,omitempty"`
-	Description   string `json:"description,omitempty"`
-	Status        string `json:"status,omitempty"`
+	TicketID      int    `json:" ticket_id" db:" ticket_id"`
+	TicketType    string `json:"ticket_type" db:"ticket_type"`
+	TicketPrice   int    `json:"ticket_price" db:"ticket_price"`
+	QuantityAvail int    `json:"quantity_avail" db:"quantity_avail"`
 }
