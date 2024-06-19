@@ -28,7 +28,7 @@ func StartApp() *echo.Echo {
 
 	port := os.Getenv("SERVER_PORT")
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 	e.Logger.Fatal(e.Start(":" + port))
 	return e

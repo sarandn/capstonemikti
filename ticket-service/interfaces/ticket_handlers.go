@@ -59,7 +59,7 @@ func (h *TicketHandler) UpdateTicket(c echo.Context) error {
 	if err := c.Bind(ticket); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Payload permintaan tidak valid"})
 	}
-	ticket.ID = uint(id)
+	ticket.TicketID = int(id)
 	updatedTicket, err := h.Service.UpdateTicket(ticket)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
