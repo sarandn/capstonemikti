@@ -1,20 +1,25 @@
 package config
 
 import (
-    "log"
+	"log"
 
-    "github.com/spf13/viper"
+	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
 
 var Config *viper.Viper
 
 func LoadConfig() {
-    Config = viper.New()
-    Config.SetConfigName("config")
-    Config.AddConfigPath(".")
-    Config.SetConfigType("yaml")
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	// Config = viper.New()
+	// Config.SetConfigName("config")
+	// Config.AddConfigPath(".")
+	// Config.SetConfigType("yaml")
 
-    if err := Config.ReadInConfig(); err != nil {
-        log.Fatalf("Error reading config file: %v", err)
-    }
+	// if err := Config.ReadInConfig(); err != nil {
+	// 	log.Fatalf("Error reading config file: %v", err)
+	// }
 }

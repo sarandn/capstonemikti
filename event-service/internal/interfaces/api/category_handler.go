@@ -68,7 +68,7 @@ func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	category.CategoryID = id
+	category.CategoryIDFK = id
 	if err := h.service.UpdateCategory(&category); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

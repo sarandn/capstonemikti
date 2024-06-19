@@ -16,9 +16,9 @@ func NewEventRepository(db *sql.DB) *EventRepository {
 
 func (r *EventRepository) Create(event *model.Event) error {
 	query := `
-    INSERT INTO events (user_id, event_name, image, location, longitude, latitude, date_start, date_end, price, quantity_id, category_id, total_like)
+    INSERT INTO events (user_id_fk, event_name, image, location, longitude, latitude, date_start, date_end, price, quantity_id_fk, category_id_fk, total_like)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING event_id`
-	err := r.db.QueryRow(query, event.UserID, event.EventName, event.Image, event.Location, event.Longitude, event.Latitude, event.DateStart, event.DateEnd, event.Price, event.QuantityID, event.CategoryID, event.TotalLike).Scan(&event.EventID)
+	err := r.db.QueryRow(query, event.UserIDFK, event.EventName, event.Image, event.Location, event.Longitude, event.Latitude, event.DateStart, event.DateEnd, event.Price, event.QuantityIDFK, event.CategoryIDFK, event.TotalLike).Scan(&event.EventID)
 	if err != nil {
 		log.Printf("Failed to create event: %v", err)
 		return err
@@ -30,7 +30,7 @@ func (r *EventRepository) GetByID(eventID int) (*model.Event, error) {
 	query := `SELECT * FROM events WHERE event_id = $1`
 	row := r.db.QueryRow(query, eventID)
 	var event model.Event
-	err := row.Scan(&event.EventID, &event.UserID, &event.EventName, &event.Image, &event.Location, &event.Longitude, &event.Latitude, &event.DateStart, &event.DateEnd, &event.Price, &event.QuantityID, &event.CategoryID, &event.TotalLike)
+	err := row.Scan(&event.EventID, &event.UserIDFK, &event.EventName, &event.Image, &event.Location, &event.Longitude, &event.Latitude, &event.DateStart, &event.DateEnd, &event.Price, &event.QuantityIDFK, &event.CategoryIDFK, &event.TotalLike, &event.CreatedAt, &event.UpdatedAt)
 	if err != nil {
 		log.Printf("Failed to get event: %v", err)
 		return nil, err
@@ -50,7 +50,7 @@ func (r *EventRepository) GetAll() ([]*model.Event, error) {
 	var events []*model.Event
 	for rows.Next() {
 		var event model.Event
-		if err := rows.Scan(&event.EventID, &event.UserID, &event.EventName, &event.Image, &event.Location, &event.Longitude, &event.Latitude, &event.DateStart, &event.DateEnd, &event.Price, &event.QuantityID, &event.CategoryID, &event.TotalLike); err != nil {
+		if err := rows.Scan(&event.EventID, &event.UserIDFK, &event.EventName, &event.Image, &event.Location, &event.Longitude, &event.Latitude, &event.DateStart, &event.DateEnd, &event.Price, &event.QuantityIDFK, &event.CategoryIDFK, &event.TotalLike, &event.CreatedAt, &event.UpdatedAt); err != nil {
 			log.Printf("Failed to scan event: %v", err)
 			return nil, err
 		}
@@ -61,9 +61,9 @@ func (r *EventRepository) GetAll() ([]*model.Event, error) {
 
 func (r *EventRepository) Update(event *model.Event) error {
 	query := `
-    UPDATE events SET user_id = $1, event_name = $2, image = $3, location = $4, longitude = $5, latitude = $6, date_start = $7, date_end = $8, price = $9, quantity_id = $10, category_id = $11, total_like = $12
+    UPDATE events SET user_id_fk = $1, event_name = $2, image = $3, location = $4, longitude = $5, latitude = $6, date_start = $7, date_end = $8, price = $9, quantity_id_fk = $10, category_id_fk = $11, total_like = $12
     WHERE event_id = $13`
-	_, err := r.db.Exec(query, event.UserID, event.EventName, event.Image, event.Location, event.Longitude, event.Latitude, event.DateStart, event.DateEnd, event.Price, event.QuantityID, event.CategoryID, event.TotalLike, event.EventID)
+	_, err := r.db.Exec(query, event.UserIDFK, event.EventName, event.Image, event.Location, event.Longitude, event.Latitude, event.DateStart, event.DateEnd, event.Price, event.QuantityIDFK, event.CategoryIDFK, event.TotalLike, event.EventID)
 	if err != nil {
 		log.Printf("Failed to update event: %v", err)
 		return err
