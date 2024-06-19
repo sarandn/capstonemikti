@@ -15,9 +15,9 @@ func StartApp() *echo.Echo {
 	db.Init()
 	e := echo.New()
 	dbInstance := config.GetDB()
-	ticketRepo := repository.TicketRepository{DB: dbInstance}          // Menggunakan nilai, bukan pointer
-	ticketService := service.TicketService{Repo: ticketRepo}           // Menggunakan nilai, bukan pointer
-	ticketHandler := interfaces.TicketHandler{Service: &ticketService} // Memberikan pointer ke ticketService
+	ticketRepo := repository.TicketRepository{DB: dbInstance}
+	ticketService := service.TicketService{Repo: ticketRepo}
+	ticketHandler := interfaces.TicketHandler{Service: &ticketService}
 
 	e.POST("/tickets", ticketHandler.CreateTicket)
 	e.GET("/tickets", ticketHandler.GetTickets)
