@@ -1,17 +1,16 @@
 package main
 
 import (
-    "event-service/internal/app"
-
+	"event-service/config"
+	"event-service/internal/app"
+	"log"
 )
 
 func main() {
+	cfg, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
 
-
-    // Initialize the application
-    e := app.Init()
-
-    // Start the server
-    e.Logger.Fatal(e.Start(":8080"))
+	app.Start(cfg)
 }
-

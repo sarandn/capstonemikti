@@ -18,7 +18,7 @@ func (s *OrderDetailService) CreateOrderDetail(orderDetail *model.OrderDetail) e
 	return s.Repo.CreateOrderDetail(context.Background(), orderDetail)
 }
 
-func (s *OrderDetailService) GetOrderDetail(id uint) (*model.OrderDetail, error) {
+func (s *OrderDetailService) GetOrderDetail(id int) (*model.OrderDetail, error) {
 	return s.Repo.GetOrderDetail(context.Background(), id)
 }
 
@@ -30,6 +30,6 @@ func (s *OrderDetailService) UpdateOrderDetail(orderDetail *model.OrderDetail) e
 	return s.Repo.UpdateOrderDetail(context.Background(), orderDetail)
 }
 
-func (s *OrderDetailService) DeleteOrderDetail(id uint) error {
+func (s *OrderDetailService) DeleteOrderDetail(id int) error {
 	return s.Repo.DeleteOrderDetail(context.Background(), id)
 }

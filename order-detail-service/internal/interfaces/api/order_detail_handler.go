@@ -47,7 +47,7 @@ func (h *OrderDetailHandler) GetOrderDetail(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	orderDetail, err := h.Service.GetOrderDetail(uint(id))
+	orderDetail, err := h.Service.GetOrderDetail(int(id))
 	if err != nil {
 		utils.ErrorLogger.Printf("Failed to get order detail: %v", err)
 		http.Error(w, err.Error(), http.StatusNotFound)
@@ -86,7 +86,7 @@ func (h *OrderDetailHandler) UpdateOrderDetail(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	orderDetail.ID = uint(id)
+	orderDetail.OrderDetailID = uint(id)
 	if err := h.Service.UpdateOrderDetail(&orderDetail); err != nil {
 		utils.ErrorLogger.Printf("Failed to update order detail: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -107,7 +107,7 @@ func (h *OrderDetailHandler) DeleteOrderDetail(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := h.Service.DeleteOrderDetail(uint(id)); err != nil {
+	if err := h.Service.DeleteOrderDetail(int(id)); err != nil {
 		utils.ErrorLogger.Printf("Failed to delete order detail: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

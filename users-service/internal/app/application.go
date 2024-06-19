@@ -58,6 +58,8 @@ func InitializedServer() *echo.Echo {
 	r.POST("/registrasi/role", roleHandler.SaveRole)
 	r.GET("/role/:id", roleHandler.GetRole, JWTProtection())
 	r.GET("/roles", roleHandler.GetRoleList, JWTProtection())
+	r.PUT("/role/update/:id", roleHandler.UpdateRole, JWTProtection())
+	r.DELETE("/role/delete/:id", roleHandler.DeleteRole)
 
 	return r
 }
