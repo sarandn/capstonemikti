@@ -90,3 +90,8 @@ func (h *TicketHandler) GenerateToken(c echo.Context) error {
 		"token": token,
 	})
 }
+
+// SetupRoutes mengatur rute untuk aplikasi
+func SetupRoutes(e *echo.Echo, ticketHandler *TicketHandler) {
+	e.POST("/ticket/token", ticketHandler.GenerateToken)
+}

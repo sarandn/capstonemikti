@@ -2,6 +2,7 @@ package repository
 
 import (
 	"ticket-service/domain/model"
+
 	"gorm.io/gorm"
 )
 
@@ -33,9 +34,16 @@ func (r *TicketRepository) GetByID(id uint) (*model.Ticket, error) {
 }
 
 func (r *TicketRepository) Update(ticket *model.Ticket) (*model.Ticket, error) {
-	if err := r.DB.Save(ticket).Error; err != nil {
-		return nil, err
+	result := r.DB.Model(&model.Ticket{}).Where("ticket_id = ?", ticket.TicketID).Updates(map[string]interface{}{
+		"event_id_fk":    ticket.EventIDFK,
+		"ticket_type":    ticket.TicketType,
+		"ticket_price":   ticket.TicketPrice,
+		"quantity_avail": ticket.QuantityAvail,
+	})
+	if result.Error != nil {
+		return nil, result.Error
 	}
+
 	return ticket, nil
 }
 
