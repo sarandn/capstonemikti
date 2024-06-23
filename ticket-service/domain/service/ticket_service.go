@@ -13,7 +13,7 @@ func (s *TicketService) CreateTicket(ticket *model.Ticket) (*model.Ticket, error
 	return s.Repo.Create(ticket)
 }
 
-func (s *TicketService) GetTickets() ([]model.Ticket, error) {
+func (s *TicketService) GetTicket() ([]model.Ticket, error) {
 	return s.Repo.GetAll()
 }
 

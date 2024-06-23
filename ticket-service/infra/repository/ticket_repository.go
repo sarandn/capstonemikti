@@ -17,11 +17,11 @@ func (r *TicketRepository) Create(ticket *model.Ticket) (*model.Ticket, error) {
 }
 
 func (r *TicketRepository) GetAll() ([]model.Ticket, error) {
-	var tickets []model.Ticket
-	if err := r.DB.Find(&tickets).Error; err != nil {
+	var ticket []model.Ticket
+	if err := r.DB.Find(&ticket).Error; err != nil {
 		return nil, err
 	}
-	return tickets, nil
+	return ticket, nil
 }
 
 func (r *TicketRepository) GetByID(id uint) (*model.Ticket, error) {
