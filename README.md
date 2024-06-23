@@ -52,15 +52,15 @@ cd capstonemikti
 
 ## Langkah-langkah untuk Menjalankan Proyek
 
-### 1. Persiapan Database
+1. Persiapan Database
 
 Buat database baru dengan nama `capstone_mikti`.
 
-### 2. Konfigurasi File `.env`
+2. Konfigurasi File `.env`
 
 Ganti password di file `.env` masing-masing layanan menggunakan password PostgreSQL pribadi.
 
-### 3. Migrasi Data
+3. Migrasi Data
 
 Untuk setiap layanan, jalankan perintah migrasi data berikut:
 
