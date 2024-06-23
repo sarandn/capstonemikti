@@ -64,13 +64,21 @@ Ganti password di file `.env` masing-masing layanan menggunakan password Postgre
 
 Untuk setiap layanan, jalankan perintah migrasi data berikut:
 
+#### Event Service
+
+```bash
+cd event-service
+migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
+```
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
+
 #### Order Detail Service
 
 ```bash
 cd order-detail-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
 
 #### Order Service
 
@@ -78,7 +86,7 @@ Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
 cd order-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
 
 #### Payment Service
 
@@ -86,7 +94,7 @@ Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
 cd payment-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
 
 #### Ticket Service
 
@@ -94,7 +102,7 @@ Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
 cd ticket-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
 
 #### Users Service
 
@@ -102,11 +110,19 @@ Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
 cd users-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[PASSWORD]` dengan password PostgreSQL pribadi.
+Ganti `[postgres]` dengan password PostgreSQL pribadi.
 
 ### 4. Menjalankan Layanan
 
 Untuk setiap layanan, jalankan perintah berikut:
+
+#### Event Service
+
+```bash
+cd event-service
+Event-Service/cmd/go run main.go
+```
+
 
 #### Order Detail Service
 
@@ -143,7 +159,6 @@ cd users-service
 Users-Service/cmd/go run main.go
 ```
 
-Gantilah `[PASSWORD]` dengan password PostgreSQL pribadi masing-masing untuk setiap layanan.
 
 ## Dokumentasi
 
