@@ -147,4 +147,4 @@ Gantilah `[PASSWORD]` dengan password PostgreSQL pribadi masing-masing untuk set
 
 ## Dokumentasi
 
-- [Postman] (https://depublic.postman.co/workspace/depublic-Workspace~ee94f749-a3c4-446c-8a87-b9f1b81e6d6b/collection/36476173-355ef619-c23c-4e1e-8e39-cd818f80304d?action=share&creator=36277884)
+- [Postman](https://depublic.postman.co/workspace/depublic-Workspace~ee94f749-a3c4-446c-8a87-b9f1b81e6d6b/collection/36476173-355ef619-c23c-4e1e-8e39-cd818f80304d?action=share&creator=36277884)
