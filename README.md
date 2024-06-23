@@ -49,8 +49,8 @@ cd capstonemikti
 - Jalankan command ```go mod tidy``` untuk memvalidasi dependensi. Jika ada dependensi yang belum terunduh, maka akan otomatis diunduh.
 - Unduh dan install [pgAdmin](https://www.pgadmin.org/download/)
 
-```markdown
-## Langkah-langkah untuk Menjalankan Layanan
+
+## Langkah-langkah untuk Menjalankan Proyek
 
 ### 1. Persiapan Database
 
@@ -119,33 +119,31 @@ Event-Service/cmd/go run main.go
 
 ```bash
 cd order-service
-Event-Service/cmd/go run main.go
+Order-Service/cmd/go run main.go
 ```
 
 #### Payment Service
 
 ```bash
 cd payment-service
-Event-Service/cmd/go run main.go
+Payment-Service/cmd/go run main.go
 ```
 
 #### Ticket Service
 
 ```bash
 cd ticket-service
-Event-Service/cmd/go run main.go
+Ticket-Service/cmd/go run main.go
 ```
 
 #### Users Service
 
 ```bash
 cd users-service
-Event-Service/cmd/go run main.go
+Users-Service/cmd/go run main.go
 ```
 
 Gantilah `[PASSWORD]` dengan password PostgreSQL pribadi masing-masing untuk setiap layanan.
-
-Pastikan untuk mengganti `Event-Service/cmd/go run main.go` dengan perintah yang sesuai untuk menjalankan setiap layanan, jika perlu. Ini hanya contoh perintah umum untuk menjalankan aplikasi Go berdasarkan struktur folder yang diberikan.
 
 ## Dokumentasi
 
