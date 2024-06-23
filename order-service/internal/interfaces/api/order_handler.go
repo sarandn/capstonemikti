@@ -26,7 +26,7 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	if err := h.Service.CreateOrder(&order); err != nil {
 		utils.ErrorLogger.Printf("Failed to create order: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
