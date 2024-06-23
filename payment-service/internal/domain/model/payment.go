@@ -1,8 +1,13 @@
 package model
 
+import "time"
+
 type Payment struct {
-    ID        int     `json:"id"`
-    Amount    float64 `json:"amount"`
-    Status    string  `json:"status"`
-    CreatedAt string  `json:"created_at"`
+	PaymentID     int      `json:"payment_id"`
+	OrderIDFK     int       `json:"order_id_fk"`
+	PaymentDate   time.Time `json:"payment_date"`
+	AmountPaid    int       `json:"amount_paid"`
+	PaymentMethod string   `json:"payment_method"`
+	PaymentStatus string   `json:"payment_status"`
+	CreatedAt     string    `json:"created_at"`
 }

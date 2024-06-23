@@ -30,14 +30,14 @@ func NewPaymentRepository() *PaymentRepository {
 }
 
 func (r *PaymentRepository) Create(payment *model.Payment) error {
-	query := "INSERT INTO payments (amount, status) VALUES ($1, $2) RETURNING id, created_at"
-	err := r.DB.QueryRow(query, payment.Amount, payment.Status).Scan(&payment.ID, &payment.CreatedAt)
+	query := "INSERT INTO payments (payment_id, order_id, payment_date, payment_method, amount_paid, payment_status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, created_at"
+	err := r.DB.QueryRow(query, payment.PaymentID, payment.OrderIDFK, payment.PaymentDate, payment.PaymentMethod, payment.AmountPaid, payment.PaymentStatus).Scan(&payment.PaymentID, &payment.CreatedAt)
 	return err
 }
 
 func (r *PaymentRepository) GetByID(id int) (*model.Payment, error) {
 	query := "SELECT id, amount, status, created_at FROM payments WHERE id = $1"
 	payment := &model.Payment{}
-	err := r.DB.QueryRow(query, id).Scan(&payment.ID, &payment.Amount, &payment.Status, &payment.CreatedAt)
+	err := r.DB.QueryRow(query, id).Scan(&payment.PaymentID, payment.OrderIDFK, &payment.PaymentDate, &payment.PaymentMethod,&payment.AmountPaid, &payment.PaymentStatus, &payment.CreatedAt)
 	return payment, err
 }
