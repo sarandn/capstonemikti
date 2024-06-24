@@ -1,6 +1,6 @@
 # Capstone-Aplikasi 'Ticketing' menggunakan Golang
 
-Proyek ini dibuat untuk untuk memenuhi syarat-syarat menyelesaikan kegiatan Study Independent MSIB batch 6 di mitra MIKTI. Selain itu, proyek ini juga bertujuan untuk memperdalam pemahaman menggunakan bahasa pemrograman Golang.
+Proyek ini merupakan bagian penting dari kegiatan Study Independent MSIB batch 6 di mitra MIKTI, dimaksudkan untuk memenuhi persyaratan program studi sekaligus mengasah keterampilan dalam bahasa pemrograman Golang.
 
 ## Detail Proyek
 Tema:
@@ -70,7 +70,7 @@ Untuk setiap layanan, jalankan perintah migrasi data berikut:
 cd event-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 #### Order Detail Service
 
@@ -78,7 +78,7 @@ Ganti `[postgres]` dengan password PostgreSQL pribadi.
 cd order-detail-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 #### Order Service
 
@@ -86,7 +86,7 @@ Ganti `[postgres]` dengan password PostgreSQL pribadi.
 cd order-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 #### Payment Service
 
@@ -94,7 +94,7 @@ Ganti `[postgres]` dengan password PostgreSQL pribadi.
 cd payment-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 #### Ticket Service
 
@@ -102,7 +102,7 @@ Ganti `[postgres]` dengan password PostgreSQL pribadi.
 cd ticket-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 #### Users Service
 
@@ -110,7 +110,7 @@ Ganti `[postgres]` dengan password PostgreSQL pribadi.
 cd users-service
 migrate -database "postgres://postgres:[PASSWORD]@localhost:5432/capstone_mikti?sslmode=disable" -path db/migrations up
 ```
-Ganti `[postgres]` dengan password PostgreSQL pribadi.
+Ganti `[password]` dengan password PostgreSQL pribadi.
 
 ### 4. Menjalankan Layanan
 
